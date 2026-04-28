@@ -398,6 +398,78 @@
       color: var(--color-text-muted)
     }
 
+    /* FLOWCHART */
+    .flowchart {
+      margin: var(--space-8) 0 0;
+      padding-bottom: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .flowchart::-webkit-scrollbar {
+      display: none;
+    }
+    .flow-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      min-width: max-content;
+      margin: 0 auto;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .flow-box {
+      border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      letter-spacing: -0.02em;
+    }
+    .flow-box.main-box {
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: var(--radius-lg);
+    }
+    .flow-box.sub-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      width: 100%;
+      box-shadow: none;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+    .flow-branch {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+    .flow-arrow {
+      color: var(--color-text-faint);
+      font-weight: 700;
+      margin-top: 10px;
+      font-size: var(--text-base);
+    }
+    .flow-arrow.vertical {
+      margin-top: -2px;
+      margin-bottom: -2px;
+      font-size: var(--text-sm);
+    }
+
     /* FILTER */
     .filter-bar {
       position: sticky;
@@ -947,6 +1019,47 @@
     </div>
     <h1>이 질문, <em>저는 이렇게</em> 들었어요</h1>
     <p>비즈니스와 면접에서 자주 나오는 질문들. 보통은 그냥 답하지만, 저는 그 안의 숨은 의도를 먼저 읽어요. 사고 과정을 함께 나눠볼게요.</p>
+    
+    <div class="flowchart">
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-box main-box">💬 질문</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box main-box">🧑 상대파악</div>
+          <div class="flow-arrow vertical">↓</div>
+          <div class="flow-branch">
+            <div class="flow-box sub-box">👔 상사/면접관</div>
+            <div class="flow-box sub-box">🤝 동료/파트너</div>
+            <div class="flow-box sub-box">👋 첫만남</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box main-box">📍 맥락분석</div>
+          <div class="flow-arrow vertical">↓</div>
+          <div class="flow-branch">
+            <div class="flow-box sub-box">초반 (첫인상)</div>
+            <div class="flow-box sub-box">중반 (업무/협상)</div>
+            <div class="flow-box sub-box">후반 (마무리)</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box main-box">🔍 숨은 의도</div>
+          <div class="flow-arrow vertical">↓</div>
+          <div class="flow-branch">
+            <div class="flow-box sub-box">신뢰 테스트</div>
+            <div class="flow-box sub-box">업무 체크</div>
+            <div class="flow-box sub-box">관계 신호</div>
+            <div class="flow-box sub-box">설득 국면</div>
+            <div class="flow-box sub-box">자기표현 요청</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="hero-stats">
       <div class="stat-item"><span class="stat-num">50</span><span class="stat-label">질문 해석</span></div>
       <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">카테고리</span></div>
@@ -1102,6 +1215,25 @@
     let activeCat = 'all';
     let searchQuery = '';
 
+    function getDailyQuestion() {
+      const now = new Date();
+      // KST(한국 표준시) 시간으로 변환
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const kst = new Date(utc + (9 * 3600000));
+      // 2026-4-29 형식의 문자열 생성
+      const dateString = kst.getFullYear() + "-" + (kst.getMonth() + 1) + "-" + kst.getDate();
+      
+      // 날짜 문자열을 기반으로 간단한 해시(Hash) 생성
+      let hash = 0;
+      for (let i = 0; i < dateString.length; i++) {
+        hash = ((hash << 5) - hash) + dateString.charCodeAt(i);
+        hash |= 0; 
+      }
+      // 해시값을 이용해 50개 질문 중 하나 선택 (음수 방지용 Math.abs)
+      const index = Math.abs(hash) % questions.length;
+      return questions[index];
+    }
+
     function render() {
       const container = document.getElementById('questionsContainer');
       const queryLower = searchQuery.toLowerCase();
@@ -1124,6 +1256,20 @@
 
       if (activeCat === 'all' && !isSearching) {
         let html = '';
+        
+        // ✨ 오늘의 질문 렌더링 (전체 탭 & 검색 안 할 때만 노출)
+        const dailyQ = getDailyQuestion();
+        html += `<div class="qotd-wrapper" style="margin-bottom: var(--space-10); padding: var(--space-5) var(--space-6) var(--space-6); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--color-primary-highlight); box-shadow: var(--shadow-sm);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4);">
+            <span style="font-size: 1.25rem;">✨</span>
+            <h2 style="font-family: var(--font-display); font-size: var(--text-base); font-weight: 700; color: var(--color-primary);">오늘의 질문</h2>
+            <span style="margin-left: auto; font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500;">매일 자정(KST) 갱신</span>
+          </div>
+          <div class="questions-grid" style="grid-template-columns: 1fr;">
+            ${renderCard(dailyQ, false)}
+          </div>
+        </div>`;
+
         Object.entries(categories).forEach(([cat, label]) => {
           const catQs = filtered.filter(q => q.cat === cat);
           if (catQs.length > 0) {
