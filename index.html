@@ -24,9 +24,10 @@
 
     :root,
     [data-theme="light"] {
-      --color-bg: #f7f6f2;
-      --color-surface: #f9f8f5;
-      --color-surface-2: #ffffff;
+      --color-bg: #faf8f5;
+      --color-bg-transparent: rgba(250, 248, 245, 0);
+      --color-surface: #ffffff;
+      --color-surface-2: #f2f0ec;
       --color-surface-offset: #f0ede8;
       --color-divider: #e0ddd8;
       --color-border: rgba(40, 37, 29, 0.12);
@@ -79,6 +80,7 @@
 
     [data-theme="dark"] {
       --color-bg: #171614;
+      --color-bg-transparent: rgba(23, 22, 20, 0);
       --color-surface: #1c1b19;
       --color-surface-2: #222120;
       --color-surface-offset: #1d1c1a;
@@ -109,6 +111,7 @@
     @media(prefers-color-scheme:dark) {
       :root:not([data-theme]) {
         --color-bg: #171614;
+        --color-bg-transparent: rgba(23, 22, 20, 0);
         --color-surface: #1c1b19;
         --color-surface-2: #222120;
         --color-surface-offset: #1d1c1a;
@@ -407,12 +410,27 @@
       align-items: center;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
     }
+
     .flowchart::-webkit-scrollbar {
-      display: none;
+      height: 6px;
     }
+
+    .flowchart::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .flowchart::-webkit-scrollbar-thumb {
+      background-color: var(--color-border);
+      border-radius: var(--radius-full);
+    }
+
+    .flowchart::-webkit-scrollbar-thumb:hover {
+      background-color: var(--color-text-faint);
+    }
+
     .flow-row {
       display: flex;
       align-items: flex-start;
@@ -420,12 +438,14 @@
       min-width: max-content;
       margin: 0 auto;
     }
+
     .flow-step {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: var(--space-2);
     }
+
     .flow-box {
       border-radius: var(--radius-md);
       padding: var(--space-2) var(--space-4);
@@ -436,11 +456,13 @@
       box-shadow: var(--shadow-sm);
       letter-spacing: -0.02em;
     }
+
     .flow-box.main-box {
       background: var(--color-primary);
       color: #fff;
       border-radius: var(--radius-lg);
     }
+
     .flow-box.sub-box {
       background: var(--color-surface);
       border: 1px solid var(--color-border);
@@ -452,18 +474,21 @@
       padding: var(--space-1) var(--space-2);
       border-radius: var(--radius-sm);
     }
+
     .flow-branch {
       display: flex;
       flex-direction: column;
       gap: 6px;
       width: 100%;
     }
+
     .flow-arrow {
       color: var(--color-text-faint);
       font-weight: 700;
       margin-top: 10px;
       font-size: var(--text-base);
     }
+
     .flow-arrow.vertical {
       margin-top: -2px;
       margin-bottom: -2px;
@@ -487,12 +512,80 @@
       align-items: center;
       gap: var(--space-3);
       overflow-x: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+      padding-bottom: var(--space-2);
     }
 
     .filter-inner::-webkit-scrollbar {
-      display: none
+      height: 6px;
+    }
+
+    .filter-inner::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .filter-inner::-webkit-scrollbar-thumb {
+      background-color: var(--color-border);
+      border-radius: var(--radius-full);
+    }
+
+    .filter-inner::-webkit-scrollbar-thumb:hover {
+      background-color: var(--color-text-faint);
+    }
+
+    /* Scroll Shadows (JS controlled, displayed ON TOP) */
+    .scroll-container-wrapper {
+      position: relative;
+    }
+
+    .scroll-container-wrapper::before,
+    .scroll-container-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .scroll-container-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.06), transparent);
+    }
+
+    .scroll-container-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.06), transparent);
+    }
+
+    [data-theme="dark"] .scroll-container-wrapper::before {
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+    }
+
+    [data-theme="dark"] .scroll-container-wrapper::after {
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.5), transparent);
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root:not([data-theme]) .scroll-container-wrapper::before {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+      }
+
+      :root:not([data-theme]) .scroll-container-wrapper::after {
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.5), transparent);
+      }
+    }
+
+    .scroll-container-wrapper.can-scroll-left::before {
+      opacity: 1;
+    }
+
+    .scroll-container-wrapper.can-scroll-right::after {
+      opacity: 1;
     }
 
     .filter-btn {
@@ -1019,42 +1112,44 @@
     </div>
     <h1>이 질문, <em>저는 이렇게</em> 들었어요</h1>
     <p>비즈니스와 면접에서 자주 나오는 질문들. 보통은 그냥 답하지만, 저는 그 안의 숨은 의도를 먼저 읽어요. 사고 과정을 함께 나눠볼게요.</p>
-    
-    <div class="flowchart">
-      <div class="flow-row">
-        <div class="flow-step">
-          <div class="flow-box main-box">💬 질문</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box main-box">🧑 상대파악</div>
-          <div class="flow-arrow vertical">↓</div>
-          <div class="flow-branch">
-            <div class="flow-box sub-box">👔 상사/면접관</div>
-            <div class="flow-box sub-box">🤝 동료/파트너</div>
-            <div class="flow-box sub-box">👋 첫만남</div>
+
+    <div class="scroll-container-wrapper flowchart-wrapper" style="margin: var(--space-8) 0 0;">
+      <div class="flowchart" style="margin: 0;">
+        <div class="flow-row">
+          <div class="flow-step">
+            <div class="flow-box main-box">💬 질문</div>
           </div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box main-box">📍 맥락분석</div>
-          <div class="flow-arrow vertical">↓</div>
-          <div class="flow-branch">
-            <div class="flow-box sub-box">초반 (첫인상)</div>
-            <div class="flow-box sub-box">중반 (업무/협상)</div>
-            <div class="flow-box sub-box">후반 (마무리)</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-box main-box">🧑 상대파악</div>
+            <div class="flow-arrow vertical">↓</div>
+            <div class="flow-branch">
+              <div class="flow-box sub-box">👔 상사/면접관</div>
+              <div class="flow-box sub-box">🤝 동료/파트너</div>
+              <div class="flow-box sub-box">👋 첫만남</div>
+            </div>
           </div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box main-box">🔍 숨은 의도</div>
-          <div class="flow-arrow vertical">↓</div>
-          <div class="flow-branch">
-            <div class="flow-box sub-box">신뢰 테스트</div>
-            <div class="flow-box sub-box">업무 체크</div>
-            <div class="flow-box sub-box">관계 신호</div>
-            <div class="flow-box sub-box">설득 국면</div>
-            <div class="flow-box sub-box">자기표현 요청</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-box main-box">📍 맥락분석</div>
+            <div class="flow-arrow vertical">↓</div>
+            <div class="flow-branch">
+              <div class="flow-box sub-box">초반 (첫인상)</div>
+              <div class="flow-box sub-box">중반 (업무/협상)</div>
+              <div class="flow-box sub-box">후반 (마무리)</div>
+            </div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-box main-box">🔍 숨은 의도</div>
+            <div class="flow-arrow vertical">↓</div>
+            <div class="flow-branch">
+              <div class="flow-box sub-box">신뢰 테스트</div>
+              <div class="flow-box sub-box">업무 체크</div>
+              <div class="flow-box sub-box">관계 신호</div>
+              <div class="flow-box sub-box">설득 국면</div>
+              <div class="flow-box sub-box">자기표현 요청</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1068,7 +1163,7 @@
   </section>
 
   <!-- FILTER -->
-  <div class="filter-bar">
+  <div class="filter-bar scroll-container-wrapper">
     <div class="filter-inner">
       <button class="filter-btn cat-all active" data-cat="all">전체 50</button>
       <button class="filter-btn cat-면접" data-cat="면접">면접 질문</button>
@@ -1222,12 +1317,12 @@
       const kst = new Date(utc + (9 * 3600000));
       // 2026-4-29 형식의 문자열 생성
       const dateString = kst.getFullYear() + "-" + (kst.getMonth() + 1) + "-" + kst.getDate();
-      
+
       // 날짜 문자열을 기반으로 간단한 해시(Hash) 생성
       let hash = 0;
       for (let i = 0; i < dateString.length; i++) {
         hash = ((hash << 5) - hash) + dateString.charCodeAt(i);
-        hash |= 0; 
+        hash |= 0;
       }
       // 해시값을 이용해 50개 질문 중 하나 선택 (음수 방지용 Math.abs)
       const index = Math.abs(hash) % questions.length;
@@ -1256,7 +1351,7 @@
 
       if (activeCat === 'all' && !isSearching) {
         let html = '';
-        
+
         // ✨ 오늘의 질문 렌더링 (전체 탭 & 검색 안 할 때만 노출)
         const dailyQ = getDailyQuestion();
         html += `<div class="qotd-wrapper" style="margin-bottom: var(--space-10); padding: var(--space-5) var(--space-6) var(--space-6); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--color-primary-highlight); box-shadow: var(--shadow-sm);">
@@ -1303,6 +1398,27 @@
     });
 
     render();
+
+    // Scroll Shadows
+    function updateScrollShadows() {
+      document.querySelectorAll('.scroll-container-wrapper').forEach(wrapper => {
+        const scroller = wrapper.querySelector('.filter-inner, .flowchart');
+        if (!scroller) return;
+
+        const canScrollLeft = scroller.scrollLeft > 5;
+        // scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft < 5
+        const canScrollRight = scroller.scrollWidth - scroller.clientWidth - Math.ceil(scroller.scrollLeft) > 5;
+
+        wrapper.classList.toggle('can-scroll-left', canScrollLeft);
+        wrapper.classList.toggle('can-scroll-right', canScrollRight);
+      });
+    }
+
+    document.querySelectorAll('.filter-inner, .flowchart').forEach(scroller => {
+      scroller.addEventListener('scroll', updateScrollShadows, { passive: true });
+    });
+    window.addEventListener('resize', updateScrollShadows);
+    setTimeout(updateScrollShadows, 50);
 
     // Theme toggle
     (function () {
