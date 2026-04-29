@@ -173,7 +173,7 @@
     html {
       -webkit-font-smoothing: antialiased;
       scroll-behavior: smooth;
-      scroll-padding-top: 80px
+      scroll-padding-top: 20px;
     }
 
     body {
@@ -381,7 +381,9 @@
       gap: var(--space-8);
       margin-top: var(--space-10);
       padding-top: var(--space-8);
-      border-top: 1px solid var(--color-border)
+      border-top: 1px solid var(--color-border);
+      padding-bottom: var(--space-8);
+      border-bottom: 1px solid var(--color-border);
     }
 
     .stat-item {
@@ -502,11 +504,11 @@
       z-index: 90;
       background: var(--color-bg);
       border-bottom: 1px solid var(--color-border);
-      padding: var(--space-3) var(--space-6)
+      padding: var(--space-6) var(--space-6)
     }
 
     .filter-inner {
-      max-width: 1100px;
+      max-width: 100%;
       margin-inline: auto;
       display: flex;
       align-items: center;
@@ -514,7 +516,7 @@
       overflow-x: auto;
       scrollbar-width: thin;
       scrollbar-color: var(--color-border) transparent;
-      padding-bottom: var(--space-2);
+      padding-top: var(--space-2);
     }
 
     .filter-inner::-webkit-scrollbar {
@@ -534,10 +536,7 @@
       background-color: var(--color-text-faint);
     }
 
-    /* Scroll Shadows (JS controlled, displayed ON TOP) */
-    .scroll-container-wrapper {
-      position: relative;
-    }
+
 
     .scroll-container-wrapper::before,
     .scroll-container-wrapper::after {
@@ -1082,7 +1081,7 @@
         </svg>
         <div>
           <div class="logo-text">오성후의 질문 해석</div>
-          <div class="logo-sub">신입의 시선으로 읽는 대화 스크립트</div>
+          <div class="logo-sub">신입이 반드시 알아야 할, 질문의 숨은 의도 찾기</div>
         </div>
       </a>
       <div class="header-actions">
@@ -1096,7 +1095,7 @@
             <path
               d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
           </svg>
-          인스타그램
+          인스타
         </a>
       </div>
     </div>
@@ -1108,10 +1107,11 @@
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
-      해석의 시선으로 읽는 대화 스크립트
+      신입이 반드시 알아야 할, 질문의 숨은 의도 찾기
     </div>
-    <h1>이 질문, <em>저는 이렇게</em> 들었어요</h1>
-    <p>비즈니스와 면접에서 자주 나오는 질문들. 보통은 그냥 답하지만, 저는 그 안의 숨은 의도를 먼저 읽어요. 사고 과정을 함께 나눠볼게요.</p>
+    <h1><em>이렇게</em> 해석해야 합니다.</h1>
+    <p>비즈니스와 면접에서 자주 나오는 질문들.</p>
+    <p>어떤 질문들은 겉으로 보이는 것과 다르게, 그 안에 숨은 의도를 먼저 읽어야 해요.</p>
 
     <div class="scroll-container-wrapper flowchart-wrapper" style="margin: var(--space-8) 0 0;">
       <div class="flowchart" style="margin: 0;">
@@ -1156,8 +1156,8 @@
     </div>
 
     <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">주제</span></div>
       <div class="stat-item"><span class="stat-num">50</span><span class="stat-label">질문 해석</span></div>
-      <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">카테고리</span></div>
       <div class="stat-item"><span class="stat-num">📝</span><span class="stat-label">오성후 해석</span></div>
     </div>
   </section>
@@ -1354,7 +1354,7 @@
 
         // ✨ 오늘의 질문 렌더링 (전체 탭 & 검색 안 할 때만 노출)
         const dailyQ = getDailyQuestion();
-        html += `<div class="qotd-wrapper" style="margin-bottom: var(--space-10); padding: var(--space-5) var(--space-6) var(--space-6); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--color-primary-highlight); box-shadow: var(--shadow-sm);">
+        html += `<div class="qotd-wrapper" style="position: static; top: 136px; z-index: 80; margin-bottom: var(--space-10); padding: var(--space-5) var(--space-6) var(--space-6); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--color-primary-highlight); box-shadow: var(--shadow-sm);">
           <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4);">
             <span style="font-size: 1.25rem;">✨</span>
             <h2 style="font-family: var(--font-display); font-size: var(--text-base); font-weight: 700; color: var(--color-primary);">오늘의 질문</h2>
@@ -1389,6 +1389,23 @@
         btn.classList.add('active');
         activeCat = btn.dataset.cat;
         render();
+
+        setTimeout(() => {
+          const filterBar = document.querySelector('.filter-bar');
+          const target = activeCat === 'all' 
+            ? document.getElementById('questionsContainer') 
+            : document.querySelector('.section-header');
+            
+          if (filterBar && target) {
+            const filterBarStuckBottom = 65 + filterBar.offsetHeight;
+            const targetTop = target.getBoundingClientRect().top + window.scrollY;
+            
+            window.scrollTo({
+              top: targetTop - filterBarStuckBottom,
+              behavior: 'smooth'
+            });
+          }
+        }, 10);
       });
     });
 
